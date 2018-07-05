@@ -1,0 +1,8 @@
+---
+  - name: configuring app servers
+    hosts: app
+    gather_facts: no
+    become: true
+    roles:
+      - apache
+      - php

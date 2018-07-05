@@ -1,0 +1,4 @@
+---
+# import playbooks for single point of execution
+  - import_playbook: app.yml
+...

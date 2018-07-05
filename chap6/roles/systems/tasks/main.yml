@@ -1,0 +1,14 @@
+---
+# tasks file for systems
+- 
+  name: "create admin user"
+  user: "name=admin uid=5001 shell=/bin/bash home=/home/admin state=present\n"
+- 
+  name: "remove user dojo"
+  user: "name=dojo state=absent\n"
+- 
+  name: "install tree utility"
+  yum: "name=tree state=present\n"
+- 
+  name: "install ntp"
+  yum: "name=ntp state=installed"

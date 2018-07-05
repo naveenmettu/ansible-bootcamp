@@ -1,0 +1,8 @@
+- name: Copy a config file to server
+  copy:
+    src: httpd.conf
+    dest: /etc/httpd.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restarting apache service whenever httpd changes

@@ -1,0 +1,6 @@
+---
+# handlers file for apache
+  - name: restarting apache service whenever httpd changes
+    service:
+      name: httpd
+      state: restarted

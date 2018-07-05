@@ -1,0 +1,78 @@
+---
+  - name: base system configuration for linux server
+    hosts: prod
+    gather_facts: no
+    become: true
+    tasks:
+      - name: create admin user
+        user:
+          name: admin
+          home: /home/admin
+          shell: /bin/bash
+          state: present
+          uid: 5001
+
+      - name: remove user dojo if present
+        user: |
+          name=dojo
+          state=present
+
+      - name: install tree package
+        yum: >
+          name=tree
+          state=present
+
+      - name: install ntp package
+        yum:
+          name: ntp
+          state: latest
+
+      - name: ensure ntpd is running
+        service:
+          name: ntpd
+          state: started
+
+  - name: configuration of app server only
+    hosts: app
+    gather_facts: false
+    become: true
+    tasks:
+      - name: creating delploy user
+        user:
+          name: delploy
+          home: /home/deploy
+          shell: /bin/bash
+          state: present
+          uid: 5003
+
+      - name: installing git
+        yum:
+          name: git
+          state: present
+
+  - name: configuration of load balancer only
+    hosts: lb
+    gather_facts: false
+    become: true
+    tasks:
+      - name: add epel repo for nginx
+        yum_repository:
+          gpgcheck: no
+          baseurl: nginx.org/packages/centos/6/x86_64/RPMS/
+
+      - name: install nginx
+        package:
+          name: nginx-1.10.0-1.el6.ngx.x86_64.rpm
+          state: present
+
+      - name: install git
+        yum:
+          name: git
+          state: present
+
+      - name: app delploy to lb
+        git:
+          repo: https://github.com/schoolofdevops/html-sample-app.git
+          dest: /usr/share/nginx/html/app
+
+...
